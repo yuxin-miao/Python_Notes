@@ -1,6 +1,7 @@
 class Solution:
     def canPartition(self, nums) -> bool:
         # 416 Equal partition
+        # dynamic programming solution
         sum_list = sum(nums)
         target = sum_list // 2
         if target * 2 != sum_list:
@@ -35,6 +36,23 @@ class Solution:
         return subset[len(nums)][target]
         # find_num(target, len(nums) - 1, [])
 
+    def canPartition2(self, nums) -> bool:
+        # 416 recursive solution, however time exceed on LeetCode 
+
+        def isSum(index, target):
+            if target == 0:
+                return True
+            if index == 0 and target != 0:
+                return False
+            if nums[index - 1] > target:
+                return isSum(index - 1, target)
+            return isSum(index - 1, target - nums[index - 1]) or isSum(index - 1, target)
+        sum_list = sum(nums)
+        target = sum_list // 2
+        if target * 2 != sum_list:
+            return False
+        return isSum(len(nums), target)
+
 
 x = Solution()
-print(x.canPartition([100, 100, 100, 100]))
+print(x.canPartition2([1, 15, 7, 7]))
