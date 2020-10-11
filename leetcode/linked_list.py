@@ -5,6 +5,8 @@ class ListNode:
 
 
 def printLinked(head: ListNode):
+    if head is None:
+        return
     while head.next:
         print(head.val, end=", ")
         head = head.next
@@ -77,11 +79,116 @@ class Solution:
             return head.next
         return head
 
+    def hasCycle(self, head: ListNode) -> bool:
+        # 141 linked list cycle detect
+        # no additional memory needed, Floyd’s Cycle-Finding Algorithm
+        if head is None or head.next is None:
+            return False
+        fast = slow = head
+        while fast and slow:
+            if fast.next is None:
+                return False
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                return True
+        return False
 
-first = ListNode(1, None)
-for i in range(2, 10):
+    def detectCycle(self, head: ListNode) -> ListNode:
+        # 142 move one pointer, n^2 time complexity, O(1) space complexity
+        def distance(ln1: ListNode, ln2: ListNode) -> int:
+            dis = 0
+            while ln1 is not ln2:
+                dis = dis + 1
+                ln1 = ln1.next
+            return dis
+
+        fast = head
+        curr_dis = 0
+        prev_dis = -1
+        while prev_dis < curr_dis and fast is not None:
+            prev_dis = curr_dis
+            fast = fast.next
+            curr_dis = distance(head, fast)
+
+        if fast is None:
+            return None
+        return fast
+        while curr_dis > 0:
+            head = head.next
+            curr_dis = curr_dis - 1
+        return head
+
+    def detectCycle2(self, head: ListNode) -> ListNode:
+        # 142 double pointer, slow and fast
+        # O(n) time complexity; O(1) space complexity
+        if head is None or head.next is None:
+            return None
+        fast = slow = head
+        while fast and slow:
+            if fast.next is None:
+                return None
+            fast = fast.next.next
+            slow = slow.next
+            if fast == slow:
+                while head is not slow:
+                    head = head.next
+                    slow = slow.next
+                return head
+        return None
+
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        # 82 remove duplicates from sorted list, only distinct values kept
+        if head is None:
+            return head
+
+        first_node = prev = link = head
+        head = head.next
+        val = head.val
+        same2 = False
+        store = head.next.val
+        while head is not None:
+            if store is head.val:
+                head = head.next
+                same2 = True
+                continue
+            elif head.next is not None:
+                if head.next.val is head.val:
+                    same2 = True
+                    store = head.val
+                    head = head.next
+                    continue
+            same2 = False
+            prev.next = head
+            prev = head
+            head = head.next
+            if head.next is not None:
+                store = head.next.val
+
+        if head is None and same2 is True:
+            prev.next = None
+        if first_node is None:
+            return None
+
+        elif first_node.val is val:
+            if first_node.next.val is val:
+                return first_node.next.next
+            return first_node.next
+        else:
+            return first_node
+
+
+last = first = ListNode(1, None)
+for i in range(2, 3):
     first = ListNode(i, first)
-printLinked(first)
+
+for i in range(5, 8):
+    first = ListNode(6, first)
+
+# printLinked(first)
 x = Solution()
-new = x.removeNthRec(first, 9)
-printLinked(new)
+# new = x.removeNthRec(first, 9)
+printLinked(first)
+# print(x.hasCycle(first))
+res = x.deleteDuplicates(first)
+printLinked(res)
