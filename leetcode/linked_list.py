@@ -1,3 +1,4 @@
+# Definition for singly-linked list.
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
@@ -177,18 +178,46 @@ class Solution:
         else:
             return first_node
 
+    def swapPairs(self, head: ListNode) -> ListNode:
+        # 24 swap every two adjacency pairs, iterative
+        dummyHead = ListNode(0)
+        dummyHead.next = head
+        temp = dummyHead
+        while temp.next and temp.next.next:
+            node1 = temp.next
+            node2 = temp.next.next
+            temp.next = node2
+            node1.next = node2.next
+            node2.next = node1
+            temp = node1
+        return dummyHead.next
+
+    def swapPairs2(self, head: ListNode) -> ListNode:
+        # 14 recursive
+        def rec_swap(node):
+            if not node:
+                return None
+            elif not node.next:
+                return node
+
+            to_link = rec_swap(node.next.next)
+            node2 = node.next
+            node.next = to_link
+            node2.next = node
+            return node2
+
+        return rec_swap(head)
+
 
 last = first = ListNode(1, None)
 for i in range(2, 3):
     first = ListNode(i, first)
 
-for i in range(5, 8):
-    first = ListNode(6, first)
 
 # printLinked(first)
 x = Solution()
 # new = x.removeNthRec(first, 9)
 printLinked(first)
 # print(x.hasCycle(first))
-res = x.deleteDuplicates(first)
+res = x.swapPairs(first)
 printLinked(res)
