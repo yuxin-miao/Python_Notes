@@ -53,6 +53,28 @@ class Solution:
         recSub(nums, [], result, 0)
         return result
 
+    def commonChars(self, A):
+        # 1002 find common characters
+        num_str = len(A)
+        index = 0
+        char_dict = {}
+        for str0 in A:
+            for char in str0:
+                if char in char_dict:
+                    char_dict[char][index] += 1
+                else:
+                    char_dict[char] = [0] * num_str
+                    char_dict[char][index] += 1
+            index += 1
+
+        char_all = []
+        for key, arr in char_dict.items():
+            count = set(arr)
+            for i in range(0, min(count)):
+                char_all.append(key)
+
+        return char_all
+
 
 x = Solution()
-print(Solution.subsets(x, [1, 2, 3]))
+print(x.commonChars(["bella", "label", "roller"]))
