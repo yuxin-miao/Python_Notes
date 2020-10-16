@@ -1,4 +1,5 @@
 class Solution:
+    # class of Solutions of non-specific data structure needs to use
     def reversePairs(self, nums) -> int:
         # counting inversions Offer 51
         def merge_count(l1, l2):
@@ -75,6 +76,36 @@ class Solution:
 
         return char_all
 
+    def sortedSquares(self, A):
+        # 977 Square of a Sorted Array
+        """ Given an array of integers A sorted in non-decreasing order,
+         return an array of the squares of each number, also in sorted non-decreasing order."""
+        pos = []
+        neg = []
+        for num in A:
+            if num < 0:
+                neg.insert(0, num * num)
+            else:
+                pos.append(num * num)
+
+        index_pos, index_neg, index_a = 0, 0, 0
+        while index_pos < len(pos) and index_neg < len(neg):
+            if pos[index_pos] < neg[index_neg]:
+                A[index_a] = pos[index_pos]
+                index_pos += 1
+            else:
+                A[index_a] = neg[index_neg]
+                index_neg += 1
+            index_a += 1
+        A[index_a:] = pos[index_pos:] + neg[index_neg:]
+        return A
+
 
 x = Solution()
-print(x.commonChars(["bella", "label", "roller"]))
+inlist = []
+for i in range(-5, 5):
+    inlist.append(i - 10)
+for i in range(10):
+    inlist.append(i)
+print(inlist)
+print(x.sortedSquares(inlist))

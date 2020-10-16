@@ -4,6 +4,7 @@ class TreeNode:
         self.val = x
         self.left = None
         self.right = None
+        self.next = None  # used for # 116, not used in BST
 
     def insertion(self, val):
         nodeR = self
@@ -66,12 +67,32 @@ class Solution:
         inorder(root)
         return res
 
+    def connect(self, root):
+        # 116 Populating Next Right Pointers in Each Node
+        # given a perfect binary tree
+        if not root:
+            return root
+        leftmost = root
+        while leftmost.left:
+            head = leftmost
+            while head:  # when at level N, link the nodes at level N+1
+                head.left.next = head.right
+                if head.next:
+                    head.right.next = head.next.left
+                head = head.next
+            leftmost = leftmost.left
+        return root
 
-root_r = TreeNode(1)
-root_r.insertion(5)
+
+root_r = TreeNode(5)
 root_r.insertion(3)
+root_r.insertion(2)
+root_r.insertion(4)
+root_r.insertion(7)
+root_r.insertion(6)
+root_r.insertion(9)
 
 root_r.printPreOrder()
 x = Solution()
-print(x.getMinimumDifference(root_r))
-print(x.inorderTraversal(root_r))
+x.connect(root_r)
+x.inorderTraversal(root_r)
