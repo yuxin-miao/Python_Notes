@@ -83,16 +83,63 @@ class Solution:
             leftmost = leftmost.left
         return root
 
+    def postOrderTwoStack(self, root: TreeNode):
+        if root is None:
+            return
+        stack = [root]
+        ans = []
+        while len(stack) != 0:
+            tmp = stack.pop()
+            ans.append(tmp.val)
+            if tmp.left:
+                stack.append(tmp.left)
+            if tmp.right:
+                stack.append(tmp.right)
+        ans.reverse()
 
-root_r = TreeNode(5)
-root_r.insertion(3)
-root_r.insertion(2)
+        return ans
+
+    def postOrderOneStack(self, root: TreeNode):
+        i = 1
+        stack = []
+        while len(stack) != 0 or i == 1:
+            while root is not None:
+                if root.right:
+                    stack.append(root.right)
+                stack.append(root)
+                root = root.left
+                i = 2 * i
+            item = stack.pop()
+            root = item
+
+            if item.right and len(stack) != 0:
+                if item.right == stack[-1]:
+                    temp = stack.pop()
+                    stack.append(root)
+                    root = temp
+                else:
+                    print(root.val, end=' ')
+                    root = None
+            else:
+                print(root.val, end=' ')
+                root = None
+
+
+root_r = TreeNode(15)
+root_r.insertion(8)
+root_r.insertion(0)
 root_r.insertion(4)
-root_r.insertion(7)
-root_r.insertion(6)
-root_r.insertion(9)
+root_r.insertion(-1)
+root_r.insertion(1)
+root_r.insertion(3)
+root_r.insertion(5)
 
-root_r.printPreOrder()
+
+root_r.insertion(17)
+root_r.insertion(16)
+root_r.insertion(19)
+
+
 x = Solution()
-x.connect(root_r)
-x.inorderTraversal(root_r)
+x.postOrderOneStack(root_r)
+print(x.postOrderTwoStack(root_r))

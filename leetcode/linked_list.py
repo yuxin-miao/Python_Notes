@@ -208,16 +208,46 @@ class Solution:
 
         return rec_swap(head)
 
+    def reorderList(self, head: ListNode) -> None:
+        # 143 reorder the linked list
+        # recursive solution, not pass
+        def reorderRec(root, fir: ListNode):
+            while fir.next:
+                root = reorderRec(root, fir.next)
+                break
+            if root is None:
+                return None
+            if root.next is fir or root.next is None:
+                return None
+            temp = root.next
+            root.next = fir
+            root = temp
+            while temp.next is not fir:
+                temp = temp.next
+            temp.next = None
+            fir.next = root
 
-last = first = ListNode(1, None)
-for i in range(2, 3):
-    first = ListNode(i, first)
+            # printLinked(root)
+            return root
+        if head is None:
+            return
+        reorderRec(head, head)
+
+    def reorderList(self, head: ListNode) -> None:
+        # 143
+        
+
+first = ListNode(1, None)
+for i in range(10):
+    first = ListNode(3, first)
+    first = ListNode(1, first)
 
 
-# printLinked(first)
+
 x = Solution()
 # new = x.removeNthRec(first, 9)
 printLinked(first)
 # print(x.hasCycle(first))
-res = x.swapPairs(first)
-printLinked(res)
+li = input()
+x.reorderList(first)
+printLinked(first)

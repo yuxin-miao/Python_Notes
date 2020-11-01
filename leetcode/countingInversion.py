@@ -100,12 +100,71 @@ class Solution:
         A[index_a:] = pos[index_pos:] + neg[index_neg:]
         return A
 
+    def totalNQueens(self, n):
+        # 52 N Queens, backtracking, through bits in binary representation representing whether could place a queen
+        # 0: could place, 1: could not
+        def queenRec(row, col, dia1, dia2):
+            # dia1: from left-top to right-bottom
+            # dia2: from right-top to left-bottom
+            if row == n:  # put a new one row by row
+                return 1
+            else:
+                count = 0  # how many solution
+                available = ((1 << n) - 1) & (~(col | dia1 | dia2))
+                while available:
+                    least_one = available & (~available)
+                    available = available & (available - 1)
+                    count += queenRec(row + 1, col | least_one, (dia1 | least_one) << 1, (dia2 | available) >> 1)
+                return count
+        queenRec(0, 0, 0, 0)
+
+    def totalNQueens2(self, n: int) -> int:
+        def solve(row: int, columns: int, diagonals1: int, diagonals2: int) -> int:
+            if row == n:
+                return 1
+            else:
+                count = 0
+                availablePositions = ((1 << n) - 1) & (~(columns | diagonals1 | diagonals2))
+                while availablePositions:
+                    position = availablePositions & (-availablePositions)
+                    availablePositions = availablePositions & (availablePositions - 1)
+                    count += solve(row + 1, columns | position, (diagonals1 | position) << 1, (diagonals2 | position) >> 1)
+                return count
+
+        return solve(0, 0, 0, 0)
+
+    def backspaceCompare(self, S: str, T: str) -> bool:
+        # 844
+        def strBack(s: str):
+            str_len = len(s)
+            loc = s.rfind("#")
+            where = []
+            while loc != -1:
+                where.append(loc)
+                loc = s.rfind("#", 0, where[-1])
+
+            to_delete = len(where)
+            if 2 * to_delete >= len(s):
+                return ""
+            # for i in range(len(s), -1, -1):
+
+        strBack(S)
+        strBack(T)
+
+    def backspaceCompare2(self, S: str, T: str) -> bool:
+        # 884 stack
+        def build(s: str) -> str:
+            ret = list()
+            for ch in s:
+                if ch != "#":
+                    ret.append(ch)
+                elif ret:
+                    ret.pop()
+            return "".join(ret)
+
+        return build(S) == build(T)
+
 
 x = Solution()
-inlist = []
-for i in range(-5, 5):
-    inlist.append(i - 10)
-for i in range(10):
-    inlist.append(i)
-print(inlist)
-print(x.sortedSquares(inlist))
+s1 = "#a#f#g#h#h####"
+x.backspaceCompare(s1, s1)
